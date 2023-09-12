@@ -14,9 +14,10 @@ export default async function handler(
   try {
     const url = "https://api.mem.tech/api/transactions";
     const request = (await axios.post(url, req.body, headers)).data;
-    // unpacks MEM's response directly into returned executed state
     const state = request?.data?.execution?.state;
-    return res.status(200).json(state);
+    const errors = request?.data?.execution?.errors;
+    console.log(request.data);
+    return res.status(200).json({ state, errors });
   } catch (error: any) {
     console.log(error);
     return res.status(error.status || 500).end(error.message);
