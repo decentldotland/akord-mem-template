@@ -11,7 +11,7 @@ export function NotWhitelisted({ address }: NotWhitelistedProps) {
         className="underline hover:text-blue-300"
         target="_blank"
         rel="noopener noreferrer"
-        href="https://mem.tech/ide?launchExample=7908734530a8551c11b02e0b553abbd3?mainnet=true"
+        href="https://mem.tech/ide?launchExample=7908734530a8551c11b02e0b553abbd3&mainnet=true"
       >
         deploy ↗
       </a>{" "}
