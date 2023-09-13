@@ -1,8 +1,8 @@
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 import { functionId } from "@/constants";
 import { AkordContainerConfig, MEMState } from "../types";
-import { toast } from "react-hot-toast";
 
 export async function readMEM() {
   const request = await axios.get("/api/mem/read", {
