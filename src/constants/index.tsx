@@ -2,6 +2,7 @@
 export const functionId = "MkN5Y8wXRtA6nDjglxZgld5KsOPXxPsNSfpA8fU4lH0";
 
 export const userMessage = "akord-mem::";
+// in the future it can be changed to akord-admin-mem
 export const adminMessage = "akord-mem::";
 
 export const MockMEMState = {
