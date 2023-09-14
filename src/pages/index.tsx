@@ -27,7 +27,6 @@ export default function Home() {
   const [state, setState] = useState<MEMState>();
   const [stateInit, setStateInit] = useState<boolean>(true);
   const [statusMessage, setStatusMessage] = useState<string | undefined>();
-  const stateAndAddressExist = !!(state && ethAddress);
 
   // create new akord container
   async function handleCreateContainer(config: AkordContainerConfig) {
@@ -86,7 +85,7 @@ export default function Home() {
     // generate user signatures
     try {
       user_signature = await createSignature(
-        `${userMessage}${state.users_counter}`
+        `${userMessage}${state?.users_counter || 0}`
       );
       // request signature from our locally-stored private key
       admin_signature = await requestAdminSignature(
@@ -152,7 +151,7 @@ export default function Home() {
       {ethAddress && (
         <AkordActions
           {...{
-            stateAndAddressExist,
+            ethAddress,
             handleCreateContainer,
             handleJoinContainer,
           }}
