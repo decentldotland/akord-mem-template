@@ -23,13 +23,13 @@ const emptyJoinContainerConfig: JoinContainerConfig = {
 };
 
 interface AkordActionsProps {
-  stateAndAddressExist: boolean;
+  ethAddress: string | undefined;
   handleCreateContainer: (args: AkordContainerConfig) => void;
   handleJoinContainer: (args: JoinContainerConfig) => void;
 }
 
 export function AkordActions({
-  stateAndAddressExist,
+  ethAddress,
   handleCreateContainer,
   handleJoinContainer,
 }: AkordActionsProps) {
@@ -117,7 +117,7 @@ export function AkordActions({
         ))}
         <button
           className="border-black border-2 px-2 py-1 mt-4 hover:shadow-lg disabled:bg-gray-300"
-          disabled={!stateAndAddressExist}
+          disabled={!ethAddress}
           onClick={() => {
             console.log(createContainerConfig);
             handleCreateContainer(createContainerConfig);
@@ -148,7 +148,7 @@ export function AkordActions({
         ))}
         <button
           className="border-black border-2 px-2 py-1 hover:shadow-lg disabled:bg-gray-300"
-          disabled={!stateAndAddressExist}
+          disabled={!ethAddress}
           onClick={() => handleJoinContainer(joinContainerConfig)}
         >
           Join

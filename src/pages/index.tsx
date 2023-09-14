@@ -6,7 +6,7 @@ import { useAccount } from "wagmi";
 
 import { MockMEMState, adminMessage, userMessage } from "@/constants";
 import { createContainer, joinContainer, readMEM } from "@/helpers";
-import { createSignature } from "@/helpers/signature";
+import { createSignature, requestAdminSignature } from "@/helpers/signature";
 import { AkordContainerConfig, MEMState } from "@/types";
 
 import CodeLinks from "@/components/codelinks";
@@ -24,7 +24,7 @@ export default function Home() {
   const { address: ethAddress } = useAccount();
 
   // state and handlers
-  const [state, setState] = useState<MEMState>(MockMEMState);
+  const [state, setState] = useState<MEMState>();
   const [stateInit, setStateInit] = useState<boolean>(true);
   const [statusMessage, setStatusMessage] = useState<string | undefined>();
   const stateAndAddressExist = !!(state && ethAddress);
@@ -32,7 +32,7 @@ export default function Home() {
   // create new akord container
   async function handleCreateContainer(config: AkordContainerConfig) {
     setStatusMessage(undefined);
-    if (!stateAndAddressExist) return;
+    if (!ethAddress) return;
 
     let user_signature = "";
     let admin_signature = "";
@@ -40,10 +40,10 @@ export default function Home() {
     // generate user signatures
     try {
       user_signature = await createSignature(
-        `${userMessage}${state.users_counter}`
+        `${userMessage}${state?.users_counter || 0}`
       );
-      admin_signature = await createSignature(
-        `${adminMessage}${state.admin_counter}`
+      admin_signature = await requestAdminSignature(
+        `${adminMessage}${state?.admin_counter || 0}`
       );
     } catch (e) {
       toast.error("Signature generation failed", { duration: 3000 });
@@ -78,7 +78,7 @@ export default function Home() {
   }) {
     // status cleanup and validation
     setStatusMessage(undefined);
-    if (!stateAndAddressExist) return;
+    if (!ethAddress) return;
 
     let user_signature = "";
     let admin_signature = "";
@@ -88,14 +88,14 @@ export default function Home() {
       user_signature = await createSignature(
         `${userMessage}${state.users_counter}`
       );
-      admin_signature = await createSignature(
-        `${adminMessage}${state.admin_counter}`
+      // request signature from our locally-stored private key
+      admin_signature = await requestAdminSignature(
+        `${adminMessage}${state?.admin_counter || 0}`
       );
     } catch (e) {
       toast.error("Signature generation failed", { duration: 3000 });
       return;
     }
-    console.log(user_signature);
     // call the joinContainer helper function directly connected to MEM
     const newMEMState = await joinContainer(
       ethAddress,
@@ -121,17 +121,21 @@ export default function Home() {
 
   // read and set MEM state object
   useEffect(() => {
-    readMEM().then(setState).catch(console.log);
+    const asyncFuncs = async () => {
+      let MEMState;
+      try {
+        MEMState = await readMEM();
+        setState(MEMState);
+        if (!MEMState) {
+          setState(MockMEMState);
+          setStateInit(false);
+        } else setStateInit(true);
+      } catch (e: any) {
+        console.log(e.message);
+      }
+    };
+    asyncFuncs();
   }, []);
-
-  // when the state initializes, you need to interact a few times with it so
-  // MEM displays it, this effect adds a mock state for uninitialized states
-  useEffect(() => {
-    if (!state) {
-      setState(MockMEMState);
-      setStateInit(false);
-    } else setStateInit(true);
-  }, [state]);
 
   return (
     <main className="flex flex-col items-center justify-center gap-y-6 min-h-screen p-24">
