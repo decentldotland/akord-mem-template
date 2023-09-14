@@ -5,7 +5,7 @@ interface AkordSignInProps {
   setAkord: Dispatch<SetStateAction<Akord | undefined>>;
 }
 
-export function AkordSignIn({ setAkord }: AkordSignInProps) {
+export default function AkordSignIn({ setAkord }: AkordSignInProps) {
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
 

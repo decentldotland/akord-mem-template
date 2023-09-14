@@ -28,7 +28,7 @@ interface AkordActionsProps {
   handleJoinContainer: (args: JoinContainerConfig) => void;
 }
 
-export function AkordActions({
+export default function AkordActions({
   ethAddress,
   handleCreateContainer,
   handleJoinContainer,

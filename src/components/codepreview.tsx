@@ -1,10 +1,11 @@
 import { MEMState } from "@/types";
 
 interface CodePreviewProps {
+  isMockup: boolean;
   state: MEMState | undefined;
 }
 
-export default function CodePreview({ state }: CodePreviewProps) {
+export default function CodePreview({ state, isMockup }: CodePreviewProps) {
   return (
     <>
       <h2 className="font-bold text-center">Application state</h2>

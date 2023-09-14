@@ -9,11 +9,11 @@ import { createContainer, joinContainer, readMEM } from "@/helpers";
 import { createSignature, requestAdminSignature } from "@/helpers/signature";
 import { AkordContainerConfig, MEMState } from "@/types";
 
+import AkordActions from "@/components/akordActions";
+import AkordSignIn from "@/components/akordSignIn";
 import CodeLinks from "@/components/codelinks";
 import CodePreview from "@/components/codepreview";
-import { AkordSignIn } from "@/components/akordSignIn";
-import { AkordActions } from "@/components/akordActions";
-import { NotWhitelisted, UnitializedState } from "@/components/warnings";
+import Guide from "@/components/guide";
 
 const ConnectButton = dynamic(() =>
   import("@rainbow-me/rainbowkit").then((mod) => mod.ConnectButton)
@@ -142,11 +142,8 @@ export default function Home() {
         Akord Token-Gated Access Proof of Concept
       </h1>
       <CodeLinks />
-      {!stateInit && <UnitializedState />}
-      {ethAddress && state && state.admin_address !== ethAddress && (
-        <NotWhitelisted address={ethAddress} />
-      )}
-      <CodePreview state={state} />
+      <Guide />
+      <CodePreview isMockup={stateInit} state={state} />
       <ConnectButton />
       {ethAddress && (
         <AkordActions
