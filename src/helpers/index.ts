@@ -2,6 +2,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 
 import { functionId } from "@/constants";
+import { checkUserHoldings } from "./moralis";
 import { AkordContainerConfig, MEMState } from "../types";
 
 export async function readMEM() {
@@ -82,6 +83,8 @@ export async function createContainer(
 
 export async function joinContainer(
   caller: string,
+  token_address: string,
+  token_threshold: number,
   akord_address: string,
   user_sig: string,
   admin_sig: string,
@@ -91,6 +94,8 @@ export async function joinContainer(
   const payload = {
     function: "joinContainer",
     caller,
+    token_address,
+    token_threshold,
     akord_address,
     user_sig,
     admin_sig,
@@ -98,8 +103,32 @@ export async function joinContainer(
     vault_id,
   };
 
+  // validate user holdings
+  const tokenCount = await checkUserHoldings(caller, [token_address]);
+  if (tokenCount < token_threshold) {
+    console.log("Token Threshold Not Met");
+    return;
+  }
+
   // ! This is a temp fix so that the interactions get to MEM
   await writeMEM(payload, true);
   const request: MEMState | undefined = await writeMEM(payload);
+  return request;
+}
+
+export async function updateAdmin(
+  caller: string,
+  admin_sig: string,
+  new_admin_address: string
+) {
+  const payload = {
+    function: "changeAdminAddress",
+    caller,
+    admin_sig,
+    new_admin_address,
+  };
+
+  const request: MEMState | undefined = await writeMEM(payload);
+
   return request;
 }
