@@ -1,7 +1,7 @@
 import { GatingType, JoinContainerConfig, createContainerArgs } from "@/types";
 
 // TODO get new contract
-export const functionId = "JvcNAjd4KEGyjgZdEU84RMXYrXVHqUOz_mDbpg31gJE";
+export const functionId = "bICP3RVVlAxY1Tama2yiT2kXj1Z8kWJvJFV39oiadYE";
 
 export const userMessage = "akord-mem::";
 export const adminMessage = "akord-admin-mem::";
