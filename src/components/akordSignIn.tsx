@@ -1,5 +1,6 @@
 import { Akord, Auth } from "@akord/akord-js";
 import { Dispatch, SetStateAction, useState } from "react";
+import { toast } from "react-hot-toast";
 
 interface AkordSignInProps {
   setAkord: Dispatch<SetStateAction<Akord | undefined>>;
@@ -11,8 +12,16 @@ export default function AkordSignIn({ setAkord }: AkordSignInProps) {
 
   async function akordSignIn() {
     if (!email || !password) return;
-    const { wallet } = await Auth.signIn(email, password);
-    Akord.init(wallet).then(setAkord).catch(console.log);
+    try {
+      Auth.configure({ storage: window.sessionStorage });
+      const { wallet } = await Auth.signIn(email, password);
+      const akord = await Akord.init(wallet);
+      const akordUser = await akord.api.getUser();
+      setAkord(akord);
+      toast.success("Signed in as " + akordUser.email, { duration: 3000 });
+    } catch (e: any) {
+      toast.error(e.message);
+    }
   }
 
   return (
