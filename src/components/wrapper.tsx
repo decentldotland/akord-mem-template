@@ -10,6 +10,8 @@ const { chains, publicClient } = configureChains(
 
 const { connectors } = getDefaultWallets({
   appName: "Akord TGA POC",
+  // TODO replace with your custom walletconnect projectId
+  // https://cloud.walletconnect.com/sign-in
   projectId: "ba877a0d13a8f55be28c2eee259825c3",
   chains,
 });
