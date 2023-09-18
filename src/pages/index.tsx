@@ -5,9 +5,18 @@ import { toast } from "react-hot-toast";
 import { useAccount } from "wagmi";
 
 import { MockMEMState, adminMessage, userMessage } from "@/constants";
-import { createContainer, joinContainer, readMEM } from "@/helpers";
-import { createSignature, requestAdminSignature } from "@/helpers/signature";
 import { AkordContainerConfig, MEMState } from "@/types";
+import {
+  createContainer,
+  joinContainer,
+  readMEM,
+  updateAdmin,
+} from "@/helpers";
+import { createSignature, requestAdminSignature } from "@/helpers/signature";
+import {
+  getContainerIndexById,
+  getContainerIndexByVaultId,
+} from "@/helpers/state";
 
 import AkordActions from "@/components/akordActions";
 import AkordSignIn from "@/components/akordSignIn";
@@ -95,9 +104,30 @@ export default function Home() {
       toast.error("Signature generation failed", { duration: 3000 });
       return;
     }
+    let token_address;
+    let token_threshold = 0;
+
+    // this ensures that you can still interact with unitialized state,
+    // but this can be enforced when it is
+    if (state) {
+      const containerIndex =
+        getContainerIndexById(state, container_id) ||
+        getContainerIndexByVaultId(state, vault_id);
+
+      if (containerIndex === -1) {
+        console.log("no container found");
+        return;
+      }
+      const currentContainer = state.containers[containerIndex];
+      token_address = currentContainer.config.token_address;
+      token_threshold = currentContainer.config.token_threshold;
+    } else token_address = "";
+
     // call the joinContainer helper function directly connected to MEM
     const newMEMState = await joinContainer(
       ethAddress,
+      token_address,
+      token_threshold,
       akord_address,
       user_signature,
       admin_signature,
@@ -117,6 +147,36 @@ export default function Home() {
       toast.error("Failed to join container.", { duration: 3000 });
     }
   }
+
+  const handleUpdateAdmin = async (new_admin_address: string) => {
+    if (!ethAddress) return;
+
+    let admin_signature;
+    try {
+      admin_signature = await createSignature(
+        `${adminMessage}${state?.users_counter || 0}`
+      );
+    } catch (e: any) {
+      toast.error(e.message, { duration: 3000 });
+      return;
+    }
+
+    const newMEMState = await updateAdmin(
+      ethAddress,
+      admin_signature,
+      new_admin_address
+    );
+
+    if (newMEMState) {
+      setState(newMEMState);
+      const { admin_address } = newMEMState;
+      toast.success(`Admin changed successfully! New admin: ${admin_address}`, {
+        duration: 3000,
+      });
+    } else {
+      toast.error("Failed to join container.", { duration: 3000 });
+    }
+  };
 
   // read and set MEM state object
   useEffect(() => {
@@ -144,17 +204,20 @@ export default function Home() {
       <CodeLinks />
       <Guide />
       <CodePreview isMockup={stateInit} state={state} />
+      <AkordSignIn {...{ setAkord }} />
       <ConnectButton />
       {ethAddress && (
         <AkordActions
           {...{
+            akord,
             ethAddress,
+            adminAddress: state?.admin_address,
             handleCreateContainer,
             handleJoinContainer,
+            handleUpdateAdmin,
           }}
         />
       )}
-      <AkordSignIn {...{ setAkord }} />
     </main>
   );
 }

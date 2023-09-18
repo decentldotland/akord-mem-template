@@ -1,9 +1,25 @@
-// EDIT ME
+import { GatingType, JoinContainerConfig, createContainerArgs } from "@/types";
+
+// TODO get new contract
 export const functionId = "JvcNAjd4KEGyjgZdEU84RMXYrXVHqUOz_mDbpg31gJE";
 
 export const userMessage = "akord-mem::";
-// in the future it can be changed to akord-admin-mem
-export const adminMessage = "akord-mem::";
+export const adminMessage = "akord-admin-mem::";
+
+export const emptyCreateContainerConfig: createContainerArgs = {
+  vault_id: "1",
+  gating_type: GatingType.ERC20,
+  token_address: "",
+  max_entries: 100,
+  token_threshold: 1,
+  akord_address: "",
+};
+
+export const emptyJoinContainerConfig: JoinContainerConfig = {
+  akord_address: "",
+  container_id: "",
+  vault_id: "",
+};
 
 export const MockMEMState = {
   evm_molecule_endpoint: "http://evm.molecule.sh",
