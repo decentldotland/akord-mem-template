@@ -1,31 +1,35 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Akord 🤝 MEM next.js example template
+
 
 ## Getting Started
 
-First, run the development server:
+First, install dependencies
+
+```bash
+npm i
+```
+
+Then, set up a .local.env file:
+
+```bash
+# These work out of the box
+ETH_ADMIN_PK=036cd2acc51d12b9ad3b47739272ba25dfc78bd8bb95367f70f9c91861d2ee6c
+MORALIS_API_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjNmMWYzMDcwLThiZGMtNDY1OS04ZGY4LTE0NWQ5NjVhZmE5MCIsIm9yZ0lkIjoiMzEwNjA1IiwidXNlcklkIjoiMzE5MzAwIiwidHlwZUlkIjoiYjVhM2ZhMGMtOTJhMC00NjVhLWJjYmItM2RmMjk5ZTJhMGQ4IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE2ODYzNDMzNTQsImV4cCI6NDg0MjEwMzM1NH0.byOl56eeeDVXK52jHaeAtMKQMHLCRhJtfx-pgGp6_jw
+```
+
+Then run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Functions and where to go from here
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+We've marked TODOs across the application so you could change parts and variables to your needs.
+Additionally, we've left comments to detail how or why for the code.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
 ## Deploy on Vercel
 
