@@ -11,7 +11,7 @@ export default function Guide() {
         deploy ↗
       </a>{" "}
       the contract with the controlling{" "}
-      <code className="text-gray-400">admin_address</code> and contact.{" "}
+      <code className="text-gray-400">admin_address</code> and contact{" "}
       <a
         href="https://t.me/Akapepe007"
         className="underline hover:text-blue-300"
